@@ -1,6 +1,6 @@
 package mimimimetr.util;
 
-import mimimimetr.entity.Cat;
+import mimimimetr.entity.CatEntity;
 
 import java.util.LinkedList;
 import java.util.List;
@@ -9,17 +9,17 @@ public class CatsFabrik {
 
     private static int number = 1;
 
-    public static Cat getCat() {
+    public static CatEntity getCat() {
         if (number == 1) {
             number++;
-            return Cat.builder()
+            return CatEntity.builder()
                     .name("barsik")
                     .image("https://img.huffingtonpost.com/asset/5dcc613f1f00009304dee539.jpeg")
                     .message("meov")
                     .build();
         } else {
             number--;
-            return Cat.builder()
+            return CatEntity.builder()
                     .name("murzik")
                     .image("https://static.themoscowtimes.com/image/article_1360/11/portrait-of-a-cat.jpg")
                     .message("meov")
@@ -27,26 +27,26 @@ public class CatsFabrik {
         }
     }
 
-    public static List<Cat> getCatList() {
-        Cat barsik = Cat.builder()
+    public static List<CatEntity> getCatList() {
+        CatEntity barsik = CatEntity.builder()
                 .id(1L)
                 .message("meov")
                 .image("https://img.huffingtonpost.com/asset/5dcc613f1f00009304dee539.jpeg")
                 .name("barsik")
                 .build();
-        Cat murzik = Cat.builder()
+        CatEntity murzik = CatEntity.builder()
                 .id(2L)
                 .message("meov")
                 .image("https://static.themoscowtimes.com/image/article_1360/11/portrait-of-a-cat.jpg")
                 .name("murzik")
                 .build();
-        List<Cat> cats = new LinkedList<Cat>() {
+        List<CatEntity> catEntities = new LinkedList<CatEntity>() {
             {
                 add(barsik);
                 add(murzik);
             }
         };
-        return cats;
+        return catEntities;
     }
 
 }

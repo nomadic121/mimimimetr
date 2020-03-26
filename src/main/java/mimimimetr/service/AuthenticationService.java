@@ -1,10 +1,10 @@
 package mimimimetr.service;
 
-import mimimimetr.entity.User;
+import mimimimetr.entity.UserEntity;
 import org.springframework.security.core.Authentication;
 
 public interface AuthenticationService {
 
-    User getUserByAuthentication(Authentication authentication);
+    UserEntity getUserByAuthentication(Authentication authentication);
 
 }

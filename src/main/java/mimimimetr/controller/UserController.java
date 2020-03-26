@@ -2,7 +2,7 @@ package mimimimetr.controller;
 
 import lombok.NonNull;
 import lombok.RequiredArgsConstructor;
-import mimimimetr.entity.User;
+import mimimimetr.entity.UserEntity;
 import mimimimetr.service.UserService;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
@@ -29,9 +29,9 @@ public class UserController {
     }
 
     @PreAuthorize("hasAuthority('ADMIN')")
-    @GetMapping("{user}")
-    public String userEditForm(@PathVariable User user, Model model) {
-        model.addAttribute("user", user);
+    @GetMapping("{userEntity}")
+    public String userEditForm(@PathVariable UserEntity userEntity, Model model) {
+        model.addAttribute("user", userEntity);
         model.addAttribute("roles", "user");
 
         return "userEdit";
@@ -42,28 +42,28 @@ public class UserController {
     public String userSave(
             @RequestParam String username,
             @RequestParam Map<String, String> form,
-            @RequestParam("userId") User user
+            @RequestParam("userId") UserEntity userEntity
     ) {
-        userSevice.saveUser(user, username, form);
+        userSevice.saveUser(userEntity, username, form);
 
         return "redirect:/user";
     }
 
     @GetMapping("profile")
-    public String getProfile(Model model, @AuthenticationPrincipal User user) {
-        model.addAttribute("username", user.getName());
-        model.addAttribute("email", user.getEmail());
+    public String getProfile(Model model, @AuthenticationPrincipal UserEntity userEntity) {
+        model.addAttribute("username", userEntity.getName());
+        model.addAttribute("email", userEntity.getEmail());
 
         return "profile";
     }
 
     @PostMapping("profile")
     public String updateProfile(
-            @AuthenticationPrincipal User user,
+            @AuthenticationPrincipal UserEntity userEntity,
             @RequestParam String password,
             @RequestParam String email
     ) {
-        userSevice.updateProfile(user, password, email);
+        userSevice.updateProfile(userEntity, password, email);
 
         return "redirect:/user/profile";
     }

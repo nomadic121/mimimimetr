@@ -2,7 +2,7 @@ package mimimimetr.service;
 
 import lombok.RequiredArgsConstructor;
 import mimimimetr.entity.Role;
-import mimimimetr.entity.User;
+import mimimimetr.entity.UserEntity;
 import mimimimetr.repository.UserRepository;
 import org.springframework.lang.NonNull;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
@@ -23,82 +23,82 @@ public class UserService {
     private final @NonNull
     PasswordEncoder passwordEncoder;
 
-    public User Save(User user) {
-        User oldUser = userRepository.findByName(user.getName());
-        if (oldUser != null) {
-            oldUser.setName(user.getName());
+    public UserEntity save(UserEntity userEntity) {
+        UserEntity oldUserEntity = userRepository.findByName(userEntity.getName());
+        if (oldUserEntity != null) {
+            oldUserEntity.setName(userEntity.getName());
         } else {
-            return userRepository.save(user);
+            return userRepository.save(userEntity);
         }
-        return oldUser;
+        return oldUserEntity;
     }
 
-    public List<User> findAll() {
+    public List<UserEntity> findAll() {
         return userRepository.findAll();
     }
 
-    public boolean addUser(User user) {
-        User userFromDb = userRepository.findByName(user.getName());
+    public boolean addUser(UserEntity userEntity) {
+        UserEntity userEntityFromDb = userRepository.findByName(userEntity.getName());
 
-        if (userFromDb != null) {
+        if (userEntityFromDb != null) {
             return false;
         }
 
-        user.setRoles(Collections.singleton(Role.USER));
-        user.setActivationCode(UUID.randomUUID().toString());
-        user.setPassword(passwordEncoder.encode(user.getPassword()));
+        userEntity.setRoles(Collections.singleton(Role.USER));
+        userEntity.setActivationCode(UUID.randomUUID().toString());
+        userEntity.setPassword(passwordEncoder.encode(userEntity.getPassword()));
 
-        userRepository.save(user);
+        userRepository.save(userEntity);
 
 //        sendMessage(user);
 
         return true;
     }
 
-    public void saveUser(User user, String username, Map<String, String> form) {
-        user.setName(username);
+    public void saveUser(UserEntity userEntity, String username, Map<String, String> form) {
+        userEntity.setName(username);
 
         Set<String> roles = Arrays.stream(Role.values())
                 .map(Role::name)
                 .collect(Collectors.toSet());
 
-        user.getRoles().clear();
+        userEntity.getRoles().clear();
 
         for (String key : form.keySet()) {
             if (roles.contains(key)) {
-                user.getRoles().add(Role.valueOf(key));
+                userEntity.getRoles().add(Role.valueOf(key));
             }
         }
 
-        userRepository.save(user);
+        userRepository.save(userEntity);
     }
 
-    public void updateProfile(User user, String password, String email) {
-        String userEmail = user.getEmail();
+    public void updateProfile(UserEntity userEntity, String password, String email) {
+        String userEmail = userEntity.getEmail();
 
         boolean isEmailChanged = (email != null && !email.equals(userEmail)) ||
                 (userEmail != null && !userEmail.equals(email));
 
         if (isEmailChanged) {
-            user.setEmail(email);
+            userEntity.setEmail(email);
 
             if (!StringUtils.isEmpty(email)) {
-                user.setActivationCode(UUID.randomUUID().toString());
+                userEntity.setActivationCode(UUID.randomUUID().toString());
             }
         }
 
         if (!StringUtils.isEmpty(password)) {
-            user.setPassword(password);
+            userEntity.setPassword(password);
         }
 
-        userRepository.save(user);
+        userRepository.save(userEntity);
 
         if (isEmailChanged) {
 //            sendMessage(user);
         }
     }
 
-    public User getByName(final String name) {
+    public UserEntity getByName(final String name) {
         return userRepository.findOneByName(name).orElseThrow(() ->
                 new UsernameNotFoundException("User not found"));
     }

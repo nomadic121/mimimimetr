@@ -1,7 +1,7 @@
 package mimimimetr.security.details;
 
 import mimimimetr.entity.Role;
-import mimimimetr.entity.User;
+import mimimimetr.entity.UserEntity;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
@@ -18,11 +18,11 @@ public class UserDetailsImpl implements UserDetails {
 
     private Set<Role> roles;
 
-    public UserDetailsImpl(User user) {
-        this.id = user.getId();
-        this.name = user.getName();
-        this.password = user.getPassword();
-        this.roles = user.getRoles();
+    public UserDetailsImpl(UserEntity userEntity) {
+        this.id = userEntity.getId();
+        this.name = userEntity.getName();
+        this.password = userEntity.getPassword();
+        this.roles = userEntity.getRoles();
     }
 
     public Long getId() {

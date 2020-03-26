@@ -1,11 +1,11 @@
 package mimimimetr.repository;
 
-import mimimimetr.entity.Voting;
+import mimimimetr.entity.VoteEntity;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 
-public interface VoteRepository extends JpaRepository<Voting, Long> {
+public interface VoteRepository extends JpaRepository<VoteEntity, Long> {
 
     @Query(
             value = "SELECT COUNT (*) FROM VOTING " +

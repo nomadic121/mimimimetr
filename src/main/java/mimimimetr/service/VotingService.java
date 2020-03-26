@@ -2,16 +2,18 @@ package mimimimetr.service;
 
 import lombok.RequiredArgsConstructor;
 import mimimimetr.dto.CatResultsDto;
-import mimimimetr.entity.Cat;
-import mimimimetr.entity.User;
-import mimimimetr.entity.Voting;
+import mimimimetr.entity.CatEntity;
+import mimimimetr.entity.UserEntity;
+import mimimimetr.entity.VoteEntity;
+import mimimimetr.form.CatVoteForm;
+import mimimimetr.mapper.CatMapper;
 import mimimimetr.mapper.CatResultMapper;
 import mimimimetr.repository.CatRepository;
 import mimimimetr.repository.VoteRepository;
-import org.springframework.lang.NonNull;
+import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.stereotype.Service;
 
-import java.util.LinkedList;
+import java.security.Principal;
 import java.util.List;
 import java.util.Random;
 
@@ -21,43 +23,45 @@ import static java.util.stream.Collectors.toList;
 @RequiredArgsConstructor
 public class VotingService {
 
-    private final @NonNull
-    VoteRepository voteRepository;
+    private final VoteRepository voteRepository;
 
-    private final @NonNull
-    CatRepository catRepository;
+    private final CatRepository catRepository;
 
-    private final @NonNull
-    CatService catService;
+    private final CatService catService;
 
-    private final @NonNull
-    UserService userService;
+    private final UserService userService;
 
-    public void vote(final User user, final Long like, final String pair) {
-        if (pair != null || pair.contains(like.toString())) {
-            String[] cats = pair.split(":");
-            for (String x : cats) {
-                if (like == Long.valueOf(x)) {
-                    Cat catLike = catRepository.getOne(like);
-                    Voting vote1 = Voting.builder().author(user).cat(catLike).vote(true).build();
-                    voteRepository.save(vote1);
-                } else {
-                    Cat catOpponent = catRepository.getOne(Long.valueOf(x));
-                    Voting vote2 = Voting.builder().author(user).cat(catOpponent).vote(false).build();
-                    voteRepository.save(vote2);
-                }
-            }
+    public boolean vote(final Principal principal, final Long like, final Long unLike) {
+        try {
+            UserEntity userEntity = userService.getByName(principal.getName());
+            CatEntity catEntityLike = catRepository.getOne(like);
+            CatEntity catEntityUnLike = catRepository.getOne(unLike);
+            VoteEntity voteLike = VoteEntity.builder()
+                    .author(userEntity)
+                    .catEntity(catEntityLike)
+                    .vote(true)
+                    .build();
+            VoteEntity voteUnLike = VoteEntity.builder()
+                    .author(userEntity)
+                    .catEntity(catEntityUnLike)
+                    .vote(false).build();
+            voteRepository.save(voteLike);
+            voteRepository.save(voteUnLike);
+        } catch (DataIntegrityViolationException e) {
+            return false;
         }
+        return true;
     }
 
-    public List<Cat> nextCandidates(final User user) {
-        List<Cat> catList = catRepository.findNextCandidates(user);
-        if (catList != null && catList.size() >= 2) {
-            List<Cat> catsPair = new LinkedList<>();
+    public CatVoteForm nextCandidates(final UserEntity userEntity) {
+        List<Long> catIdList = catRepository.findNextCandidateList(userEntity);
+        if (catIdList != null && catIdList.size() >= 2) {
             Random r = new Random();
-            catsPair.add(catList.remove(r.nextInt(catList.size())));
-            catsPair.add(catList.get(r.nextInt(catList.size())));
-            return catsPair;
+            Long id1 = (catIdList.remove(r.nextInt(catIdList.size())));
+            Long id2 = (catIdList.get(r.nextInt(catIdList.size())));
+            CatVoteForm catVoteForm = new CatVoteForm(CatMapper.INSTANCE.catToCatDto(catRepository.findById(id1).get()),
+                    CatMapper.INSTANCE.catToCatDto(catRepository.findById(id2).get()));
+            return catVoteForm;
         } else {
             return null;
         }
@@ -69,8 +73,8 @@ public class VotingService {
                 .collect(toList());
     }
 
-    public CatResultsDto getVotesCount(Cat cat) {
-        CatResultsDto result = CatResultMapper.INSTANCE.catToCatResultDto(cat);
+    public CatResultsDto getVotesCount(CatEntity catEntity) {
+        CatResultsDto result = CatResultMapper.INSTANCE.catToCatResultDto(catEntity);
         int coutn = voteRepository.getVoteCount(result.getId());
         result.setVoteCount(coutn);
         return result;

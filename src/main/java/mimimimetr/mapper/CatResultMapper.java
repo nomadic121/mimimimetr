@@ -1,7 +1,7 @@
 package mimimimetr.mapper;
 
 import mimimimetr.dto.CatResultsDto;
-import mimimimetr.entity.Cat;
+import mimimimetr.entity.CatEntity;
 import org.mapstruct.Mapper;
 import org.mapstruct.factory.Mappers;
 
@@ -10,6 +10,6 @@ public interface CatResultMapper {
 
     CatResultMapper INSTANCE = Mappers.getMapper(CatResultMapper.class);
 
-    CatResultsDto catToCatResultDto(Cat cat);
+    CatResultsDto catToCatResultDto(CatEntity catEntity);
 
 }
