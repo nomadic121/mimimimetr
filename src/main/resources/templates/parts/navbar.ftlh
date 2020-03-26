@@ -1,5 +1,5 @@
-<#--<#include "security.ftlh">-->
-<#--<#import "login.ftlh" as l>-->
+<#include "security.ftlh">
+<#import "login.ftlh" as l>
 
 <nav class="navbar navbar-expand-lg navbar-light bg-light">
     <a class="navbar-brand" href="/">Mimimimetr</a>
@@ -17,17 +17,20 @@
             </li>
 <#--            <#if isAdmin>-->
 <#--                <li class="nav-item">-->
-<#--                    <a class="nav-link" href="/user">User list</a>-->
+<#--                    <a class="nav-link" href="/user">Список пользователей</a>-->
+<#--                </li>-->
+<#--                <li class="nav-item">-->
+<#--                    <a class="nav-link" href="/addCats">Добавить котов</a>-->
 <#--                </li>-->
 <#--            </#if>-->
 <#--            <#if user??>-->
 <#--                <li class="nav-item">-->
-<#--                    <a class="nav-link" href="/user/profile">Profile</a>-->
+<#--                    <a class="nav-link" href="/user/profile">Редактировать профиль</a>-->
 <#--                </li>-->
 <#--            </#if>-->
         </ul>
 
-<#--        <div class="navbar-text mr-3">${name}</div>-->
-<#--        <@l.logout />-->
+        <div class="navbar-text mr-3">${name}</div>
+        <@l.logout />
     </div>
 </nav>

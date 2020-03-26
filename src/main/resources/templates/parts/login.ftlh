@@ -3,12 +3,12 @@
         <div class="form-group row">
             <label class="col-sm-2 col-form-label">User Name :</label>
             <div class="col-sm-6">
-                <input type="text" name="username" value="<#if user??>${user.username}</#if>"
-                       class="form-control ${(usernameError??)?string('is-invalid', '')}"
+                <input type="text" name="name" value="<#if user??>${user.name}</#if>"
+                       class="form-control ${(nameError??)?string('is-invalid', '')}"
                        placeholder="User name" />
-                <#if usernameError??>
+                <#if nameError??>
                     <div class="invalid-feedback">
-                        ${usernameError}
+                        ${nameError}
                     </div>
                 </#if>
             </div>

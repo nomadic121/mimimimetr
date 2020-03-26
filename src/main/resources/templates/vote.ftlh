@@ -1,25 +1,28 @@
 <#import "parts/basePage.ftlh" as bp>
 
 <@bp.page>
-    <h5>Hello, guest</h5>
+    <#if msg??>
+        <h5 class="text-center py-3">${msg}</h5>
+    <#else>
+        <h5 class="text-center py-3">Выбери своего любимого котика)</h5>
+    </#if>
     <div class="card-deck">
-        <#list cats as cat>
-            <div class="card">
-                <img class="card-img-top" src="${cat.image}" alt="Card image cap">
-                <div class="card-body">
-                    <h5 class="card-title">${cat.name}</h5>
-                    <p class="card-text">${cat.message}</p>
-                    <form action="/vote" method="post">
-<#--                        <input type="hidden" name="_csrf" value="${_csrf.token}" />-->
-                        <input type="hidden" name="like" value="${cat.id}" />
-<#--                        <input type="hidden" name="opponent" value="${cat.opponent}" />-->
-                        <button class="btn btn-primary" type="submit">Like</button>
-                    </form>
-
-<#--                    <a methods="post" href="/vote/${cat.id}" class="btn btn-primary">Like</a>-->
+        <#if cats??>
+            <#list cats as cat>
+                <div class="card text-center">
+                    <img class="card-img-top" src="${cat.image}" alt="Card image cap">
+                    <div class="card-body">
+                        <h5 class="card-title">${cat.name}</h5>
+                        <p class="card-text">${cat.message}</p>
+                        <form action="/vote" method="post">
+                            <input type="hidden" name="_csrf" value="${_csrf.token}"/>
+                            <input type="hidden" name="like" value="${cat.id}"/>
+                            <input type="hidden" name="pair" value="${pair}"/>
+                            <button class="btn btn-primary" type="submit">Like</button>
+                        </form>
+                    </div>
                 </div>
-                <#--                <div class="card-footer"><small class="text-muted">Last updated 3 mins ago</small></div>-->
-            </div>
-        </#list>
+            </#list>
+        </#if>
     </div>
 </@bp.page>
