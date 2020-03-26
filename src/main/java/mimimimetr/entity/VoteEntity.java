@@ -15,7 +15,7 @@ import javax.persistence.*;
 @Table(uniqueConstraints = {
         @UniqueConstraint(columnNames = {"author_id", "cat_id"})
 })
-public class Voting {
+public class VoteEntity {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -23,11 +23,11 @@ public class Voting {
 
     @ManyToOne
     @JoinColumn(name = "author_id", nullable = false)
-    private User author;
+    private UserEntity author;
 
     @ManyToOne
     @JoinColumn(name = "cat_id", nullable = false)
-    private Cat cat;
+    private CatEntity catEntity;
 
     private boolean vote;
 
