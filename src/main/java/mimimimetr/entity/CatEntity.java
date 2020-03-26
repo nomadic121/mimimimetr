@@ -15,7 +15,7 @@ import javax.persistence.Id;
 @NoArgsConstructor
 @AllArgsConstructor
 @Entity
-public class Cat {
+public class CatEntity {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
