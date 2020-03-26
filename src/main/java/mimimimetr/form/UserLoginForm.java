@@ -1,13 +1,9 @@
 package mimimimetr.form;
 
-import lombok.AllArgsConstructor;
-import lombok.Builder;
 import lombok.Data;
 
 @Data
-@AllArgsConstructor
-@Builder
-public class UserForm {
+public class UserLoginForm {
 
     private String name;
 
