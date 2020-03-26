@@ -17,15 +17,15 @@
             </li>
 <#--            <#if isAdmin>-->
 <#--                <li class="nav-item">-->
-<#--                    <a class="nav-link" href="/user">Список пользователей</a>-->
+<#--                    <a class="nav-link" href="/userEntity">Список пользователей</a>-->
 <#--                </li>-->
 <#--                <li class="nav-item">-->
 <#--                    <a class="nav-link" href="/addCats">Добавить котов</a>-->
 <#--                </li>-->
 <#--            </#if>-->
-<#--            <#if user??>-->
+            <#--            <#if userEntity??>-->
 <#--                <li class="nav-item">-->
-<#--                    <a class="nav-link" href="/user/profile">Редактировать профиль</a>-->
+            <#--                    <a class="nav-link" href="/userEntity/profile">Редактировать профиль</a>-->
 <#--                </li>-->
 <#--            </#if>-->
         </ul>
