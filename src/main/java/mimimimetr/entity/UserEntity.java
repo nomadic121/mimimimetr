@@ -6,8 +6,6 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import javax.persistence.*;
-import javax.validation.constraints.Email;
-import javax.validation.constraints.NotBlank;
 import java.util.Set;
 
 @Data
@@ -16,25 +14,17 @@ import java.util.Set;
 @AllArgsConstructor
 @Entity
 @Table(name = "mimiUser")
-public class User {
+public class UserEntity {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @NotBlank(message = "Username cannot be empty")
     @Column(unique = true, nullable = false)
     private String name;
 
-    @NotBlank(message = "Password cannot be empty")
     private String password;
 
-    @Transient
-    @NotBlank(message = "Password confirmation cannot be empty")
-    private String password2;
-
-    @Email(message = "Email is not correct")
-    @NotBlank(message = "Email cannot be empty")
     private String email;
 
     private String activationCode;
