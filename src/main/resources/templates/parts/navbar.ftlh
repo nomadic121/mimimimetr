@@ -15,21 +15,7 @@
             <li class="nav-item">
                 <a class="nav-link" href="/results">Результаты</a>
             </li>
-<#--            <#if isAdmin>-->
-<#--                <li class="nav-item">-->
-<#--                    <a class="nav-link" href="/userEntity">Список пользователей</a>-->
-<#--                </li>-->
-<#--                <li class="nav-item">-->
-<#--                    <a class="nav-link" href="/addCats">Добавить котов</a>-->
-<#--                </li>-->
-<#--            </#if>-->
-            <#--            <#if userEntity??>-->
-<#--                <li class="nav-item">-->
-            <#--                    <a class="nav-link" href="/userEntity/profile">Редактировать профиль</a>-->
-<#--                </li>-->
-<#--            </#if>-->
         </ul>
-
         <div class="navbar-text mr-3">${name}</div>
         <@l.logout />
     </div>

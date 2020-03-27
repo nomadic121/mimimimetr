@@ -3,12 +3,15 @@
 <@bp.page>
     <#if msg??>
         <h5 class="text-center py-3">${msg}</h5>
+        <div class="text-center py-3">>
+            <a href="/results">Результаты голосования</a>
+        </div>
     <#else>
         <h5 class="text-center py-3">Выбери своего любимого котика)</h5>
     </#if>
     <div class="card-deck">
         <#if catVoteForm??>
-            <div class="card text-center">
+            <div class="card text-center" style="width: 28rem;">
                 <img class="card-img-top" src="${catVoteForm.cat1.image}" alt="Card image cap">
                 <div class="card-body">
                     <h5 class="card-title">${catVoteForm.cat1.name}</h5>
@@ -21,7 +24,7 @@
                     </form>
                 </div>
             </div>
-            <div class="card text-center">
+            <div class="card text-center" style="width: 28rem;">
                 <img class="card-img-top" src="${catVoteForm.cat2.image}" alt="Card image cap">
                 <div class="card-body">
                     <h5 class="card-title">${catVoteForm.cat2.name}</h5>
