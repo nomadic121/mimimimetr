@@ -1,22 +1,21 @@
 package mimimimetr.service;
 
 import lombok.RequiredArgsConstructor;
-import mimimimetr.dto.CatDto;
-import mimimimetr.dto.CatResultsDto;
 import mimimimetr.entity.CatEntity;
 import mimimimetr.entity.UserEntity;
 import mimimimetr.entity.VoteEntity;
 import mimimimetr.form.CatResultForm;
 import mimimimetr.form.CatVoteForm;
 import mimimimetr.mapper.CatMapper;
-import mimimimetr.mapper.CatResultMapper;
 import mimimimetr.repository.CatRepository;
 import mimimimetr.repository.VoteRepository;
 import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.stereotype.Service;
 
 import java.security.Principal;
-import java.util.*;
+import java.util.LinkedList;
+import java.util.List;
+import java.util.Random;
 
 @Service
 @RequiredArgsConstructor
@@ -53,14 +52,13 @@ public class VotingService {
     }
 
     public CatVoteForm nextCandidates(final UserEntity userEntity) {
-        List<Long> catIdList = catRepository.findNextCandidateList(userEntity);
+        List<Long> catIdList = catRepository.findNextCandidatesIdList(userEntity);
         if (catIdList != null && catIdList.size() >= 2) {
             Random r = new Random();
             Long id1 = (catIdList.remove(r.nextInt(catIdList.size())));
             Long id2 = (catIdList.get(r.nextInt(catIdList.size())));
-            CatVoteForm catVoteForm = new CatVoteForm(CatMapper.INSTANCE.catToCatDto(catRepository.findById(id1).get()),
+            return new CatVoteForm(CatMapper.INSTANCE.catToCatDto(catRepository.findById(id1).get()),
                     CatMapper.INSTANCE.catToCatDto(catRepository.findById(id2).get()));
-            return catVoteForm;
         } else {
             return null;
         }
@@ -68,20 +66,9 @@ public class VotingService {
 
     public List<CatResultForm> getResults() {
         List<CatResultForm> result = new LinkedList<>();
-        for (Long x : catRepository.findWinnersIdList()){
-            try {
-                result.add(new CatResultForm(catService.getById(x), voteRepository.getVoteCount(x)));
-            } catch (Exception e) {
-//                e.printStackTrace();
-            }
+        for (Long x : catRepository.findWinnersIdList()) {
+                result.add(new CatResultForm(catService.getById(x), voteRepository.getVoteCountById(x)));
         }
-        return result;
-    }
-
-    public CatResultsDto getVotesCount(CatEntity catEntity) {
-        CatResultsDto result = CatResultMapper.INSTANCE.catToCatResultDto(catEntity);
-        Long coutn = voteRepository.getVoteCount(result.getId());
-        result.setVoteCount(coutn);
         return result;
     }
 

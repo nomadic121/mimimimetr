@@ -3,10 +3,8 @@ package mimimimetr.controller;
 import lombok.RequiredArgsConstructor;
 import mimimimetr.entity.UserEntity;
 import mimimimetr.form.CatVoteForm;
-import mimimimetr.service.CatService;
 import mimimimetr.service.UserService;
 import mimimimetr.service.VotingService;
-import mimimimetr.util.CatsFabrik;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -20,8 +18,6 @@ import java.security.Principal;
 public class MainController {
 
     private final VotingService votingService;
-
-    private final CatService catService;
 
     private final UserService userService;
 
@@ -52,12 +48,6 @@ public class MainController {
     public String results(Model model) {
         model.addAttribute("cats", votingService.getResults());
         return "results";
-    }
-
-    @GetMapping("/init")
-    public String initCats(Model model) {
-        CatsFabrik.getCatList().stream().forEach(catService::save);
-        return "redirect:/";
     }
 
     private boolean getVoteList(final Principal principal, final Model model) {

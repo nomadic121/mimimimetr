@@ -1,8 +1,6 @@
 package mimimimetr.controller;
 
 import lombok.RequiredArgsConstructor;
-import mimimimetr.entity.Role;
-import mimimimetr.entity.UserEntity;
 import mimimimetr.form.UserRegistrationForm;
 import mimimimetr.service.UserService;
 import mimimimetr.util.ControllerUtils;
@@ -13,7 +11,6 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 
 import javax.validation.Valid;
-import java.util.Collections;
 import java.util.Map;
 
 @Controller
@@ -39,15 +36,7 @@ public class RegistrationController {
             return "registration";
         }
 
-        UserEntity userEntity = UserEntity.builder()
-                .name(userRegistrationForm.getName())
-                .password(userRegistrationForm.getPassword())
-                .email(userRegistrationForm.getEmail())
-//                .roles(Collections.singleton(Role.valueOf(registrationForm.getRoles())))
-                .roles(Collections.singleton(Role.USER))
-                .build();
-
-        if (!userSevice.addUser(userEntity)) {
+        if (!userSevice.addUser(userRegistrationForm)) {
             model.addAttribute("usernameError", "User exists!");
             return "registration";
         }
@@ -59,18 +48,5 @@ public class RegistrationController {
     public String login() {
         return "login";
     }
-
-//    @GetMapping("/activate/{code}")
-//    public String activate(Model model, @PathVariable String code) {
-//        boolean isActivated = userSevice.activateUser(code);
-//
-//        if (isActivated) {
-//            model.addAttribute("message", "User successfully activated");
-//        } else {
-//            model.addAttribute("message", "Activation code is not found!");
-//        }
-//
-//        return "login";
-//    }
 
 }

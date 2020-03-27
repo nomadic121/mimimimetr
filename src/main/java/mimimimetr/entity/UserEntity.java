@@ -30,7 +30,7 @@ public class UserEntity {
     private String activationCode;
 
     @ElementCollection(targetClass = Role.class, fetch = FetchType.EAGER)
-    @CollectionTable(name = "user_role", joinColumns = @JoinColumn(name = "user_id", nullable = false))
+    @CollectionTable(name = "user_role", joinColumns = @JoinColumn(name = "user_id", nullable = false, unique = true))
     @Enumerated(EnumType.STRING)
     private Set<Role> roles;
 

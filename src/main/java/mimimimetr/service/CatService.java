@@ -17,9 +17,9 @@ public class CatService {
         catRepository.save(catEntity);
     }
 
-    public CatDto getById (Long id) throws Exception {
-        return CatMapper.INSTANCE.catToCatDto(catRepository.findById(id).orElseThrow( () ->
-                new Exception("Cat not found")));
+    public CatDto getById(Long id) {
+        return CatMapper.INSTANCE.catToCatDto(catRepository.findById(id).orElseThrow(() ->
+                new IllegalArgumentException("Cat not found")));
     }
 
 }
