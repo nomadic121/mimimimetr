@@ -11,6 +11,6 @@ public interface VoteRepository extends JpaRepository<VoteEntity, Long> {
             value = "SELECT COUNT (*) FROM VOTING " +
                     "WHERE VOTING.cat_id = ?1 AND VOTING.vote = true",
             nativeQuery = true)
-    int getVoteCount(@Param("catId") Long catId);
+    Long getVoteCount(@Param("catId") Long catId);
 
 }

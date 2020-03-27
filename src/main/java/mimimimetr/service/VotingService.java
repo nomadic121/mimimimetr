@@ -1,10 +1,12 @@
 package mimimimetr.service;
 
 import lombok.RequiredArgsConstructor;
+import mimimimetr.dto.CatDto;
 import mimimimetr.dto.CatResultsDto;
 import mimimimetr.entity.CatEntity;
 import mimimimetr.entity.UserEntity;
 import mimimimetr.entity.VoteEntity;
+import mimimimetr.form.CatResultForm;
 import mimimimetr.form.CatVoteForm;
 import mimimimetr.mapper.CatMapper;
 import mimimimetr.mapper.CatResultMapper;
@@ -14,10 +16,7 @@ import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.stereotype.Service;
 
 import java.security.Principal;
-import java.util.List;
-import java.util.Random;
-
-import static java.util.stream.Collectors.toList;
+import java.util.*;
 
 @Service
 @RequiredArgsConstructor
@@ -67,15 +66,21 @@ public class VotingService {
         }
     }
 
-    public List<CatResultsDto> getResults() {
-        return catRepository.findAll().stream() //TODO winners
-                .map(this::getVotesCount)
-                .collect(toList());
+    public List<CatResultForm> getResults() {
+        List<CatResultForm> result = new LinkedList<>();
+        for (Long x : catRepository.findWinnersIdList()){
+            try {
+                result.add(new CatResultForm(catService.getById(x), voteRepository.getVoteCount(x)));
+            } catch (Exception e) {
+//                e.printStackTrace();
+            }
+        }
+        return result;
     }
 
     public CatResultsDto getVotesCount(CatEntity catEntity) {
         CatResultsDto result = CatResultMapper.INSTANCE.catToCatResultDto(catEntity);
-        int coutn = voteRepository.getVoteCount(result.getId());
+        Long coutn = voteRepository.getVoteCount(result.getId());
         result.setVoteCount(coutn);
         return result;
     }

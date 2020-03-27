@@ -15,6 +15,6 @@ public class CatResultsDto {
 
     private String image;
 
-    private int voteCount;
+    private Long voteCount;
 
 }
