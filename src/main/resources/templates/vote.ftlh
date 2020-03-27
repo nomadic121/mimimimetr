@@ -3,7 +3,7 @@
 <@bp.page>
     <#if msg??>
         <h5 class="text-center py-3">${msg}</h5>
-        <div class="text-center py-3">>
+        <div class="text-center py-3">
             <a href="/results">Результаты голосования</a>
         </div>
     <#else>
