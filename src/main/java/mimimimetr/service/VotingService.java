@@ -67,7 +67,7 @@ public class VotingService {
     public List<CatResultForm> getResults() {
         List<CatResultForm> result = new LinkedList<>();
         for (Long x : catRepository.findWinnersIdList()) {
-                result.add(new CatResultForm(catService.getById(x), voteRepository.getVoteCountById(x)));
+            result.add(new CatResultForm(catService.getById(x), voteRepository.getVoteCountById(x)));
         }
         return result;
     }
