@@ -23,7 +23,7 @@ public class VoteController {
     private final UserService userService;
 
     @GetMapping("/vote")
-    public String vote(Principal principal, Model model) throws CatNotFoundExeption {
+    public String vote(Principal principal, Model model) {
         getVoteList(principal, model);
         return "vote";
     }
