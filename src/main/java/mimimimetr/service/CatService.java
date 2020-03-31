@@ -3,6 +3,7 @@ package mimimimetr.service;
 import lombok.RequiredArgsConstructor;
 import mimimimetr.dto.CatDto;
 import mimimimetr.entity.CatEntity;
+import mimimimetr.exeption.CatNotFoundExeption;
 import mimimimetr.mapper.CatMapper;
 import mimimimetr.repository.CatRepository;
 import org.springframework.stereotype.Service;
@@ -17,9 +18,9 @@ public class CatService {
         catRepository.save(catEntity);
     }
 
-    public CatDto getById(Long id) {
+    public CatDto getById(Long id) throws CatNotFoundExeption {
         return CatMapper.INSTANCE.catToCatDto(catRepository.findById(id).orElseThrow(() ->
-                new IllegalArgumentException("Cat not found")));
+                new CatNotFoundExeption("Cat not found. Id: " + id)));
     }
 
 }

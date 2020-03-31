@@ -50,7 +50,7 @@ public class UserService {
 
     public UserEntity getByName(final String name) {
         return userRepository.findOneByName(name).orElseThrow(() ->
-                new UsernameNotFoundException("User not found"));
+                new UsernameNotFoundException("User not found. name: " + name));
     }
 
 }

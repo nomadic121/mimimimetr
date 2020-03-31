@@ -4,6 +4,7 @@ import lombok.RequiredArgsConstructor;
 import mimimimetr.entity.CatEntity;
 import mimimimetr.entity.UserEntity;
 import mimimimetr.entity.VoteEntity;
+import mimimimetr.exeption.CatNotFoundExeption;
 import mimimimetr.form.CatResultForm;
 import mimimimetr.form.CatVoteForm;
 import mimimimetr.mapper.CatMapper;
@@ -51,20 +52,22 @@ public class VotingService {
         return true;
     }
 
-    public CatVoteForm nextCandidates(final UserEntity userEntity) {
+    public CatVoteForm nextCandidates(final UserEntity userEntity) throws CatNotFoundExeption {
         List<Long> catIdList = catRepository.findNextCandidatesIdList(userEntity);
         if (catIdList != null && catIdList.size() >= 2) {
             Random r = new Random();
             Long id1 = (catIdList.remove(r.nextInt(catIdList.size())));
             Long id2 = (catIdList.get(r.nextInt(catIdList.size())));
-            return new CatVoteForm(CatMapper.INSTANCE.catToCatDto(catRepository.findById(id1).get()),
-                    CatMapper.INSTANCE.catToCatDto(catRepository.findById(id2).get()));
+            return new CatVoteForm(CatMapper.INSTANCE.catToCatDto(catRepository.findById(id1).orElseThrow(() ->
+                    new CatNotFoundExeption("Cat not found. Id: " + id1.toString()))),
+                    CatMapper.INSTANCE.catToCatDto(catRepository.findById(id2).orElseThrow(() ->
+                            new CatNotFoundExeption("Cat not found. Id: " + id2.toString()))));
         } else {
             return null;
         }
     }
 
-    public List<CatResultForm> getResults() {
+    public List<CatResultForm> getResults() throws CatNotFoundExeption {
         List<CatResultForm> result = new LinkedList<>();
         for (Long x : catRepository.findWinnersIdList()) {
             result.add(new CatResultForm(catService.getById(x), voteRepository.getVoteCountById(x)));

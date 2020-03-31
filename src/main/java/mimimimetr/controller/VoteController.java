@@ -2,6 +2,7 @@ package mimimimetr.controller;
 
 import lombok.RequiredArgsConstructor;
 import mimimimetr.entity.UserEntity;
+import mimimimetr.exeption.CatNotFoundExeption;
 import mimimimetr.form.CatVoteForm;
 import mimimimetr.service.UserService;
 import mimimimetr.service.VotingService;
@@ -22,7 +23,7 @@ public class VoteController {
     private final UserService userService;
 
     @GetMapping("/vote")
-    public String vote(Principal principal, Model model) {
+    public String vote(Principal principal, Model model) throws CatNotFoundExeption {
         getVoteList(principal, model);
         return "vote";
     }
@@ -41,13 +42,22 @@ public class VoteController {
 
     @GetMapping("/results")
     public String results(Model model) {
-        model.addAttribute("cats", votingService.getResults());
+        try {
+            model.addAttribute("cats", votingService.getResults());
+        } catch (CatNotFoundExeption catNotFoundExeption) {
+            model.addAttribute("msg", "Что то пошло не так, попробуйте еще раз!");
+        }
         return "results";
     }
 
     private boolean getVoteList(final Principal principal, final Model model) {
         UserEntity userEntity = userService.getByName(principal.getName());
-        CatVoteForm catVoteForm = votingService.nextCandidates(userEntity);
+        CatVoteForm catVoteForm = null;
+        try {
+            catVoteForm = votingService.nextCandidates(userEntity);
+        } catch (CatNotFoundExeption catNotFoundExeption) {
+            model.addAttribute("msg", "Что то пошло не так, попробуйте еще раз!");
+        }
         if (catVoteForm != null) {
             model.addAttribute("catVoteForm", catVoteForm);
             return true;
